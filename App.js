@@ -86,7 +86,7 @@ phoneChange = phone => {
 
  render(){
   let selectedButton = this.state.data.find(e => e.checked === true);
-  selectedButton = selectedButton ? selectedButton.value : this.state.data[0].label;
+  selectedButton = selectedButton ? selectedButton.value : this.state.data[1].label;
  return (
    <View>
      <Text style={styles.paragraph}>
