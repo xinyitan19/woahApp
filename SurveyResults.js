@@ -12,6 +12,7 @@ export default class SurveyResults extends React.Component{
     render(){
       const { navigation } = this.props;
       const q1= this.props.navigation.getParam('q1', '[]')
+      const name = this.props.navigation.getParam('name', ' ');
       const journal = <Text> Journal </Text>;
       const prepare = <Text> Prepare in your training well </Text>;
     return (
@@ -20,7 +21,7 @@ export default class SurveyResults extends React.Component{
           To help improve your mental strength and readiness, try these 3 tips selected for you based off of your survey answers. You can choose different tips if you prefer. More information on these suggestions will be given later.
         </Text>
         {q1[0].checked ? journal : prepare}
-        <Button onPress={() => {this.props.navigation.navigate('RouteNameFour')}} title = "I'm all set!" />
+        <Button onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name})}} title = "I'm all set!" />
         </View>
          );
     }

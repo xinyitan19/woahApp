@@ -5,8 +5,11 @@ import PropTypes from 'prop-types';
 import { createSwitchNavigator } from 'react-navigation';
 import {createAppContainer} from 'react-navigation';
 import RadioGroup from 'react-native-radio-buttons-group';
+import Modal from 'react-native-modal';
+
 
 import SurveyResults from './SurveyResults';
+import MentalStrength from './MentalStrength';
 
 
 class StartScreen extends React.Component{
@@ -36,34 +39,28 @@ class SurveyOne extends React.Component{
      {
        label: 'Always',
        value: "Always",
-       checked: false,
      },
      {
        label: 'Sometimes',
        value: "Sometimes",
-       checked: false,
      },
      {
        label: 'Never',
        value: "Never",
-       checked: false,
      },
    ],
    data2: [
     {
       label: 'Always',
       value: "Always",
-      checked: false,
     },
     {
       label: 'Sometimes',
       value: "Sometimes",
-      checked: false,
     },
     {
       label: 'Never',
       value: "Never",
-      checked: false,
     },
   ],
  }
@@ -85,8 +82,8 @@ phoneChange = phone => {
 }
 
  render(){
-  let selectedButton = this.state.data.find(e => e.checked === true);
-  selectedButton = selectedButton ? selectedButton.value : this.state.data[1].label;
+  let selectedButton = this.state.data.find(e => e.selected === true);
+  selectedButton = selectedButton ? selectedButton.value : this.state.data[0].label;
  return (
    <View>
      <Text style={styles.paragraph}>
@@ -103,7 +100,7 @@ phoneChange = phone => {
        Do you feel motivated to train?
      </Text>
        <RadioGroup radioButtons={this.state.data2} onPress={this.onPress2} />
-       <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {q1: this.state.data, q2: this.state.data2})}} title = "Ready for my recommendations!" />
+       <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2})}} title = "Ready for my recommendations!" />
      </View>
  );
  }
@@ -113,10 +110,6 @@ phoneChange = phone => {
 class TrainingOverview extends React.Component{
   constructor(props) {
     super(props);
-
-    this.state = {
-      name: this.props.name,
-    };
   }
   render(){
   return (
@@ -125,7 +118,7 @@ class TrainingOverview extends React.Component{
         Training Overview
       </Text>
 <Text style={styles.paragraph}>
-        Welcome back, {this.state.name}!
+        Welcome back, {JSON.stringify(this.props.navigation.getParam('name', 'NO-ID'))}!
       </Text>
       <Button title = "Running" />
       <Button title = "Nutrition" />
@@ -136,21 +129,6 @@ class TrainingOverview extends React.Component{
   }
 }
 
-class MentalStrength extends React.Component{
-  render(){
-  return (
-    <View>
-    <Text style={styles.header}>
-        Mental Strength and Readiness
-      </Text>
-<Text style={styles.paragraph}>
-        Congrats, (name), you have a (n) day streak of completing your recommendations!
-      </Text>
-      <Button onPress={() => {this.props.navigation.navigate('RouteNameTwo')}} title = "Recommendation 1" />
-      </View>
-       );
-  }
-}
 
 const AppNavigator1 = createSwitchNavigator({RouteNameOne: StartScreen, 
 RouteNameTwo: SurveyOne, 
