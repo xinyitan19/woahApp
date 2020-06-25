@@ -82,7 +82,7 @@ phoneChange = phone => {
 }
 
  render(){
-  let selectedButton = this.state.data.find(e => e.selected === true);
+  let selectedButton = this.state.data.find(e => e.selected == true);
   selectedButton = selectedButton ? selectedButton.value : this.state.data[0].label;
  return (
    <View>
