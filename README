@@ -1,0 +1,6 @@
+Download Visual Studio Code.
+Download the code for the app through github: https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository
+You need a virtual device in order to run the code and see what the app looks like.
+To set up your virtual device, you need to first download Android Studio. 
+After you've downloaded Android Studio, use this Youtube video to set up the virtual device: https://www.youtube.com/watch?v=KRLLjlpy0r4.
+After that, you should be able to run the app on the virtual device. Make sure the device is already open before you try to run it.
