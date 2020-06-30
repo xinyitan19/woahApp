@@ -1,13 +1,21 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, Button, CheckBox, MultipleChoice, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import PropTypes from 'prop-types';
 import { createSwitchNavigator } from 'react-navigation';
 import {createAppContainer} from 'react-navigation';
+import { Button, CheckBox } from 'react-native-elements';
+
+const MyContext = React.createContext();
 
 export default class SurveyResults extends React.Component{
   constructor(props) {
     super(props);
+    this.state = {
+      vchecked: false,
+      mchecked: false,
+      schecked: false,
+    }
   }
     render(){
       const { navigation } = this.props;
@@ -16,18 +24,30 @@ export default class SurveyResults extends React.Component{
       const name = this.props.navigation.getParam('name', ' ');
       const journal = <Text> Journal </Text>;
       const prepare = <Text> Prepare in your training well </Text>;
-      const visualize = <Text> Visualize your success </Text>;
-      const visualizebold = <Text style={{fontWeight: "bold"}}> Visualize your success </Text>
-      const mindfulness = <Text> Practice Mindfulness </Text>;
-      const mbold = <Text style={{fontWeight: "bold"}}> Practice Mindfulness </Text>
-      const selftalk = <Text> Improve your self talk </Text>;
-      const sbold = <Text style={{fontWeight: "bold"}}> Improve your self talk </Text>
-      const reward = <Text> Reward yourself when you achieve a goal </Text>;
-      const rbold = <Text style={{fontWeight: "bold"}}> Reward yourself when you achieve a goal </Text>
-      const gratitude = <Text> Practice gratitude </Text>;
-      const gbold = <Text style={{fontWeight: "bold"}}> Practice gratitude </Text>
-      const expectations = <Text> Adjust your expectations </Text>;
-      const ebold = <Text style={{fontWeight: "bold"}}> Adjust your expectations </Text>
+      const visualize = <CheckBox checked={this.state.vchecked}
+      onPress={() => this.setState({vchecked: !this.state.vchecked})} title = "Visualize your success" />;
+      const visualizebold = <CheckBox checked={!this.state.vchecked}
+      onPress={() => this.setState({vchecked: !this.state.vchecked})} title = "Visualize your success" />;
+      const mindfulness = <CheckBox checked={this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Practice mindfulness" />;
+      const mbold = <CheckBox checked={!this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Practice mindfulness" />;
+      const selftalk = <CheckBox checked={this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Improve your self talk" />;
+      const sbold = <CheckBox checked={!this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Improve your self talk" />;
+      const reward = <CheckBox checked={this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Reward yourself when you achieve a goal" />;
+      const rbold = <CheckBox checked={!this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Reward yourself when you achieve a goal" />;
+      const gratitude = <CheckBox checked={this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Practice gratitude" />;
+      const gbold = <CheckBox checked={!this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Practice gratitude" />;
+      const expectations = <CheckBox checked={this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Adjust your expectations" />;
+      const ebold = <CheckBox checked={!this.state.checked}
+      onPress={() => this.setState({checked: !this.state.checked})} title = "Adjust your expectations" />;
     return (
       <View>
   <Text style={styles.paragraph}>

@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, Button, CheckBox, MultipleChoice, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, CheckBox, MultipleChoice, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import PropTypes from 'prop-types';
 import { createSwitchNavigator } from 'react-navigation';
 import {createAppContainer} from 'react-navigation';
 import RadioGroup from 'react-native-radio-buttons-group';
 import Modal from 'react-native-modal';
+import { Button, Slider } from 'react-native-elements';
 
 
 import SurveyResults from './SurveyResults';
 import MentalStrength from './MentalStrength';
-
 
 class StartScreen extends React.Component{
   render(){
@@ -35,6 +35,7 @@ class SurveyOne extends React.Component{
    name: '',
    email: '',
    phone: '',
+   value: '',
    data: [
      {
        label: 'Always',
@@ -100,8 +101,15 @@ phoneChange = phone => {
        Do you feel motivated to train?
      </Text>
        <RadioGroup radioButtons={this.state.data2} onPress={this.onPress2} />
+       <Text style={styles.paragraph}>
+How confident are you on a scale of 1-10, 1 being not confident at all and 10 being extremely confident?
+     </Text>
+       <Slider maximumValue = {10}  step = {1} minimumValue = {1} value={this.state.value} thumbTintColor= 'black'
+    onValueChange={(value) => this.setState({ value: value })}
+  />
+  <Text>Value: {this.state.value}</Text>
        <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2})}} title = "Ready for my recommendations!" />
-     </View>
+      </View>
  );
  }
 }
@@ -113,17 +121,17 @@ class TrainingOverview extends React.Component{
   }
   render(){
   return (
-    <View>
+    <View style={styles.container1}>
     <Text style={styles.header}>
         Training Overview
       </Text>
 <Text style={styles.paragraph}>
         Welcome back, {JSON.stringify(this.props.navigation.getParam('name', 'NO-ID'))}!
       </Text>
-      <Button title = "Running" />
-      <Button title = "Nutrition" />
-      <Button onPress={() => {this.props.navigation.navigate('RouteNameFive')}} title = "Mental Strength and Readiness" />
-      <Button title = "Sleep" />
+      <Button raised ={true} title = "Running" type="outline"/>
+      <Button raised ={true} title = "Nutrition" type="outline"/>
+      <Button raised ={true} type="outline" onPress={() => {this.props.navigation.navigate('RouteNameFive')}} title = "Mental Strength and Readiness" />
+      <Button raised ={true} type="outline" title = "Sleep" />
       </View>
        );
   }
@@ -154,6 +162,14 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ffffbf',
     padding: 8,
+  },
+  container1: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: '#ffffbf',
+    padding: 8,
+  justifyContent: 'space-between',
   },
   paragraph: {
     margin: 24,
