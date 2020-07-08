@@ -7,6 +7,7 @@ import {createAppContainer} from 'react-navigation';
 import RadioGroup from 'react-native-radio-buttons-group';
 import Modal from 'react-native-modal';
 import { Button, Slider } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 import SurveyResults from './SurveyResults';
@@ -32,6 +33,15 @@ class SurveyOne extends React.Component{
   constructor() {
    super();
  this.state = {
+   jchecked: false,
+   pchecked: false,
+   machecked: false,
+  vchecked: false,
+  mchecked: false,
+  schecked: false,
+  rchecked: false,
+  gchecked: false,
+  echecked: false,
    name: '',
    email: '',
    phone: '',
@@ -40,28 +50,34 @@ class SurveyOne extends React.Component{
      {
        label: 'Always',
        value: "Always",
+       size: 20,
      },
      {
        label: 'Sometimes',
        value: "Sometimes",
+       size: 20,
      },
      {
        label: 'Never',
        value: "Never",
+       size: 20,
      },
    ],
    data2: [
     {
       label: 'Always',
       value: "Always",
+      size: 20,
     },
     {
       label: 'Sometimes',
       value: "Sometimes",
+      size: 20,
     },
     {
       label: 'Never',
       value: "Never",
+      size: 20,
     },
   ],
  }
@@ -86,7 +102,7 @@ phoneChange = phone => {
   let selectedButton = this.state.data.find(e => e.selected == true);
   selectedButton = selectedButton ? selectedButton.value : this.state.data[0].label;
  return (
-   <View>
+   <View style = {styles.container}>
      <Text style={styles.paragraph}>
        To create your plan, we need to ask you some questions.
      </Text>
@@ -108,7 +124,7 @@ How confident are you on a scale of 1-10, 1 being not confident at all and 10 be
     onValueChange={(value) => this.setState({ value: value })}
   />
   <Text>Value: {this.state.value}</Text>
-       <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2})}} title = "Ready for my recommendations!" />
+       <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {value: this.state.value, name: this.state.name, q1: this.state.data, q2: this.state.data2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "Ready for my recommendations!" />
       </View>
  );
  }
@@ -120,8 +136,24 @@ class TrainingOverview extends React.Component{
     super(props);
   }
   render(){
+    const jchecked= this.props.navigation.getParam('jchecked', 'false')
+     const pchecked= this.props.navigation.getParam('pchecked', 'false')
+    const  machecked= this.props.navigation.getParam('machecked', 'false')
+    const vchecked= this.props.navigation.getParam('vchecked', 'false')
+    const mchecked= this.props.navigation.getParam('mchecked', 'false')
+    const schecked= this.props.navigation.getParam('schecked', 'false')
+    const rchecked= this.props.navigation.getParam('rchecked', 'false')
+    const gchecked= this.props.navigation.getParam('gchecked', 'false')
+    const echecked= this.props.navigation.getParam('echecked', 'false')
   return (
     <View style={styles.container1}>
+      <Button icon={
+    <Icon
+      name="arrow-left"
+      size={15}
+      color="white"
+    />
+  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameThree')}}  />
     <Text style={styles.header}>
         Training Overview
       </Text>
@@ -130,7 +162,7 @@ class TrainingOverview extends React.Component{
       </Text>
       <Button raised ={true} title = "Running" type="outline"/>
       <Button raised ={true} title = "Nutrition" type="outline"/>
-      <Button raised ={true} type="outline" onPress={() => {this.props.navigation.navigate('RouteNameFive')}} title = "Mental Strength and Readiness" />
+      <Button raised ={true} type="outline" onPress={() => {this.props.navigation.navigate('RouteNameFive'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked}}} title = "Mental Strength and Readiness" />
       <Button raised ={true} type="outline" title = "Sleep" />
       </View>
        );
@@ -162,6 +194,29 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ffffbf',
     padding: 8,
+    marginVertical: 20,
+    marginHorizontal: 20
+  },
+  check:{
+    justifyContent: 'center',
+    padding: 5,
+    marginVertical: 6,
+  marginHorizontal: 2,
+  backgroundColor: '#fdc407',
+  },
+  back:{
+    justifyContent: 'center',
+    padding: 5,
+    marginVertical: 4,
+  marginHorizontal: 2,
+  backgroundColor: '#fedc56',
+  width: 40,
+  },
+  checktext:{
+    justifyContent: 'center',
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 15,
   },
   container1: {
     flex: 1,
@@ -170,9 +225,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffbf',
     padding: 8,
   justifyContent: 'space-between',
+  marginVertical: 20,
+    marginHorizontal: 20
   },
   paragraph: {
-    margin: 24,
+    margin: 10,
     fontSize: 14,
     textAlign: 'center',
   },
