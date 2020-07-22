@@ -8,12 +8,18 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import Modal from 'react-native-modal';
 import { Button, Slider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import axios from 'axios';
 
 import SurveyResults from './SurveyResults';
 import MentalStrength from './MentalStrength';
+import {api} from './api';
+
 
 class StartScreen extends React.Component{
+  async componentDidMount(){
+  const {data} = await api.get('/Feedback%20sessions?maxRecords=3&view=All%20sessions')
+  console.log(data)
+  }
   render(){
   return (
 <View style={styles.container}>
@@ -23,7 +29,7 @@ class StartScreen extends React.Component{
       <Text style={styles.paragraph}>
         a holistic, easy-to-use running training plan for you
       </Text>
-      <Button onPress={() => {this.props.navigation.navigate('RouteNameTwo')}} title = "Get Started" />
+      <Button color = {'white'} buttonStyle = {styles.check}  size={20} onPress={() => {this.props.navigation.navigate('RouteNameTwo')}} title = "Get Started" />
     </View>
   );
   }
@@ -51,16 +57,19 @@ class SurveyOne extends React.Component{
        label: 'Always',
        value: "Always",
        size: 20,
+       color: 'white'
      },
      {
        label: 'Sometimes',
        value: "Sometimes",
        size: 20,
+       color: 'white'
      },
      {
        label: 'Never',
        value: "Never",
        size: 20,
+       color: 'white'
      },
    ],
    data2: [
@@ -68,16 +77,19 @@ class SurveyOne extends React.Component{
       label: 'Always',
       value: "Always",
       size: 20,
+      color: 'white'
     },
     {
       label: 'Sometimes',
       value: "Sometimes",
       size: 20,
+      color: 'white'
     },
     {
       label: 'Never',
       value: "Never",
       size: 20,
+      color: 'white'
     },
   ],
  }
@@ -85,6 +97,12 @@ class SurveyOne extends React.Component{
 
   onPress = data => this.setState({ data });
   onPress2 = data2 => this.setState({ data2 });
+
+handleSubmit = () => {
+  const res = api.post('/Feedback%20sessions', this.state)
+  console.log(res)
+  this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2, value: this.state.value})
+}
 
 nameChange = name => {
  this.setState({name})
@@ -106,9 +124,9 @@ phoneChange = phone => {
      <Text style={styles.paragraph}>
        To create your plan, we need to ask you some questions.
      </Text>
-     <TextInput style = {styles.input} placeholder="Name" onChangeText = {this.nameChange} value = {this.state.name}/>
-     <TextInput style = {styles.input} placeholder="Email" onChangeText = {this.emailChange} value = {this.state.email} />
-     <TextInput style = {styles.input} placeholder="Phone Number" onChangeText = {this.phoneChange} value = {this.state.phone} keyboardType = "numeric" />
+     <TextInput placeholderTextColor = {'white'} style = {styles.input} placeholder="Name" onChangeText = {this.nameChange} value = {this.state.name}/>
+     <TextInput placeholderTextColor = {'white'} style = {styles.input} placeholder="Email" onChangeText = {this.emailChange} value = {this.state.email} />
+     <TextInput placeholderTextColor = {'white'} style = {styles.input} placeholder="Phone Number" onChangeText = {this.phoneChange} value = {this.state.phone} keyboardType = "numeric" />
      <Text style={styles.paragraph}>
        Do you believe you can improve in running?
      </Text>
@@ -120,11 +138,11 @@ phoneChange = phone => {
        <Text style={styles.paragraph}>
 How confident are you on a scale of 1-10, 1 being not confident at all and 10 being extremely confident?
      </Text>
-       <Slider maximumValue = {10}  step = {1} minimumValue = {1} value={this.state.value} thumbTintColor= 'black'
+       <Slider thumbTintColor = '#ffffff' thumbStyle={styles.slide} trackStyle={styles.slide} maximumValue = {10}  step = {1} minimumValue = {1} value={this.state.value} thumbTintColor= 'black'
     onValueChange={(value) => this.setState({ value: value })}
   />
-  <Text>Value: {this.state.value}</Text>
-       <Button onPress={() => {this.props.navigation.navigate('RouteNameThree', {value: this.state.value, name: this.state.name, q1: this.state.data, q2: this.state.data2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "Ready for my recommendations!" />
+  <Text style={styles.paragraph}>Value: {this.state.value}</Text>
+       <Button titleStyle = {styles.butt} buttonStyle= {styles.butt} onPress={this.handleSubmit} title = "Ready for my recommendations!" />
       </View>
  );
  }
@@ -145,6 +163,9 @@ class TrainingOverview extends React.Component{
     const rchecked= this.props.navigation.getParam('rchecked', 'false')
     const gchecked= this.props.navigation.getParam('gchecked', 'false')
     const echecked= this.props.navigation.getParam('echecked', 'false')
+    const q1= this.props.navigation.getParam('q1', '[]')
+    const q2= this.props.navigation.getParam('q2', '[]')
+    console.log("vchecked: " + vchecked)
   return (
     <View style={styles.container1}>
       <Button icon={
@@ -153,17 +174,17 @@ class TrainingOverview extends React.Component{
       size={15}
       color="white"
     />
-  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameThree')}}  />
+  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameThree'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2}}}  />
     <Text style={styles.header}>
         Training Overview
       </Text>
 <Text style={styles.paragraph}>
         Welcome back, {JSON.stringify(this.props.navigation.getParam('name', 'NO-ID'))}!
       </Text>
-      <Button raised ={true} title = "Running" type="outline"/>
-      <Button raised ={true} title = "Nutrition" type="outline"/>
-      <Button raised ={true} type="outline" onPress={() => {this.props.navigation.navigate('RouteNameFive'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked}}} title = "Mental Strength and Readiness" />
-      <Button raised ={true} type="outline" title = "Sleep" />
+      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Running" />
+      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Nutrition" />
+      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} onPress={() => {this.props.navigation.navigate('RouteNameFive'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2}}} title = "Mental Strength and Readiness" />
+      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Sleep" />
       </View>
        );
   }
@@ -192,7 +213,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ffffbf',
+    backgroundColor: '#fdbd17',
     padding: 8,
     marginVertical: 20,
     marginHorizontal: 20
@@ -202,14 +223,25 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: 6,
   marginHorizontal: 2,
-  backgroundColor: '#fdc407',
+  backgroundColor: '#fdbd17',
+  },
+  slide:{
+backgroundColor: 'white',
+marginBottom: 2
+  },
+  butt:{
+    justifyContent: 'center',
+    
+  backgroundColor: '#fdbd17',
+  borderColor: 'white',
+  fontSize: 20
   },
   back:{
     justifyContent: 'center',
     padding: 5,
     marginVertical: 4,
   marginHorizontal: 2,
-  backgroundColor: '#fedc56',
+  backgroundColor: '#fdbd17',
   width: 40,
   },
   checktext:{
@@ -222,26 +254,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ffffbf',
+    backgroundColor: '#fdbd17',
     padding: 8,
-  justifyContent: 'space-between',
+  
   marginVertical: 20,
     marginHorizontal: 20
   },
   paragraph: {
-    margin: 10,
-    fontSize: 14,
+    margin: 6,
+    fontSize: 16,
     textAlign: 'center',
+    color: 'white',
   },
   header: {
     margin: 24,
     fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: 'white',
   },
   input: {
     padding: 5,
-    borderColor: 'black',
+    borderColor: 'white',
     borderWidth: 1,
+    color: 'white',
   }
 });

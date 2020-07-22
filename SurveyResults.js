@@ -21,13 +21,15 @@ export default class SurveyResults extends React.Component{
        schecked: this.props.navigation.getParam('schecked', 'false'),
        rchecked: this.props.navigation.getParam('rchecked', 'false'),
        gchecked: this.props.navigation.getParam('gchecked', 'false'),
-       echecked: this.props.navigation.getParam('echecked', 'false')
+       echecked: this.props.navigation.getParam('echecked', 'false'),
+       q1: this.props.navigation.getParam('q1', '[]'),
+       q2: this.props.navigation.getParam('q2', '[]')
     }
   }
     render(){
+      console.log(this.state.q1)
+      console.log(this.state.q2)
       const { navigation } = this.props;
-      const q1= this.props.navigation.getParam('q1', '[]')
-      const q2= this.props.navigation.getParam('q2', '[]')
       const name = this.props.navigation.getParam('name', ' ');
       const value = this.props.navigation.getParam('value', ' ');
       const journal = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.jchecked}
@@ -74,20 +76,21 @@ export default class SurveyResults extends React.Component{
       size={15}
       color="white"
     />
-  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameTwo')}}  />
+  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameTwo', {name: name, q1: this.state.q1, q2: this.state.q2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}}  />
   <Text style={styles.paragraph}>
           To help improve your mental strength and readiness, try these 3 tips selected for you based off of your survey answers. You can choose different tips if you prefer. More information on these suggestions will be given later.
         </Text>
-        {q1[0].selected ? visualizebold : visualize}
-        {q1[1].selected ? mbold : mindfulness}
-        {q1[2].selected ? sbold : selftalk}
-        {q2[0].selected ? rbold : reward}
-        {q2[1].selected ? gbold : gratitude}
-        {q2[2].selected ? ebold : expectations}
+        {this.state.q1[0].selected ? visualizebold : visualize}
+        {this.state.q1[1].selected ? mbold : mindfulness}
+        {this.state.q1[2].selected ? sbold : selftalk}
+        {this.state.q2[0].selected ? rbold : reward}
+        {this.state.q2[1].selected ? gbold : gratitude}
+        {this.state.q2[2].selected ? ebold : expectations}
         {value===1 || value ===2 || value===3 ? journalbold : journal}
         {value===4 || value ===5 || value===6 ? prepbold : prepare}
         {value===7 || value ===8 || value===9 ? mantrabold : mantra}
-        <Button buttonStyle={styles.check} onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "I'm all set!" />
+        
+        <Button buttonStyle={styles.check} onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name, q1: this.state.q1, q2: this.state.q2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "I'm all set!" />
         </View>
          );
     }
@@ -107,14 +110,14 @@ export default class SurveyResults extends React.Component{
       padding: 5,
       marginVertical: 6,
     marginHorizontal: 2,
-    backgroundColor: '#fdc407',
+    backgroundColor: '#fdbd17',
     },
     back:{
       justifyContent: 'center',
       padding: 5,
       marginVertical: 4,
     marginHorizontal: 2,
-    backgroundColor: '#fedc56',
+    backgroundColor: '#fdbd17',
     width: 40,
     },
     checktext:{
@@ -127,7 +130,7 @@ export default class SurveyResults extends React.Component{
       margin: 13,
       fontSize: 16,
       textAlign: 'center',
-      color: '#fcd12a',
+      color: '#fdbd17',
       fontWeight: 'bold',
     },
     header: {
