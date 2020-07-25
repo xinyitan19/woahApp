@@ -6,12 +6,14 @@ import { createSwitchNavigator } from 'react-navigation';
 import {createAppContainer} from 'react-navigation';
 import { Button, CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {api} from './api';
 
 const MyContext = React.createContext();
 
 export default class SurveyResults extends React.Component{
   constructor(props) {
     super(props);
+    console.log(props)
     this.state = {
       jchecked: this.props.navigation.getParam('jchecked', 'false'),
       pchecked: this.props.navigation.getParam('pchecked', 'false'),
@@ -23,12 +25,24 @@ export default class SurveyResults extends React.Component{
        gchecked: this.props.navigation.getParam('gchecked', 'false'),
        echecked: this.props.navigation.getParam('echecked', 'false'),
        q1: this.props.navigation.getParam('q1', '[]'),
-       q2: this.props.navigation.getParam('q2', '[]')
+       q2: this.props.navigation.getParam('q2', '[]'),
+       id: this.props.navigation.getParam('id', '')
+       
     }
   }
+  async componentDidMount(){
+    console.log(this.state.id)
+  const mydata = {fields: {jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked}}
+      await api.patch('/Feedback%20sessions', mydata)
+      .then(function (response) {
+        console.log(response);
+      })  
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
     render(){
-      console.log(this.state.q1)
-      console.log(this.state.q2)
+      
       const { navigation } = this.props;
       const name = this.props.navigation.getParam('name', ' ');
       const value = this.props.navigation.getParam('value', ' ');
@@ -68,7 +82,8 @@ export default class SurveyResults extends React.Component{
       onPress={() => this.setState({echecked: !this.state.echecked})} title = "Adjust your expectations" />;
       const ebold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.echecked}
       onPress={() => this.setState({echecked: !this.state.echecked})} title = "Adjust your expectations" />;
-    return (
+      
+      return (
       <View style={styles.container}>
         <Button icon={
     <Icon

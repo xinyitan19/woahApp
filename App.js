@@ -18,7 +18,7 @@ import {api} from './api';
 class StartScreen extends React.Component{
   async componentDidMount(){
   const {data} = await api.get('/Feedback%20sessions?maxRecords=3&view=All%20sessions')
-  console.log(data)
+  // console.log(data)
   }
   render(){
   return (
@@ -95,16 +95,34 @@ class SurveyOne extends React.Component{
  }
   }
 
-  onPress = data => this.setState({ data });
+  onPress1 = data => this.setState({ data });
   onPress2 = data2 => this.setState({ data2 });
 
-handleSubmit = () => {
-  const res = api.post('/Feedback%20sessions', this.state)
-  console.log(res)
-  this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2, value: this.state.value})
+ handleSubmit = () => {
+   var datavalue1 = null
+   this.state.data.forEach((item)=> {
+     if(item.selected) 
+     {datavalue1=item.value}
+   })
+   var datavalue2 = null
+   this.state.data2.forEach((item)=> {
+    if(item.selected) 
+    {datavalue2=item.value}
+  })
+   const data = {fields: {name: this.state.name, email: this.state.email, phone: this.state.phone, value: this.state.value, data: datavalue1, data2: datavalue2}}
+   console.log(data)
+   api.post('/Feedback%20sessions', data)
+  .then(function (response) {
+    console.log(response); 
+  })
+  .catch(function (error) {
+    console.log(error);
+    console.log("console LOG")
+  });
+  this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2, value: this.state.value, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})
 }
 
-nameChange = name => {
+nameChange = name => { 
  this.setState({name})
 }
 
@@ -130,7 +148,7 @@ phoneChange = phone => {
      <Text style={styles.paragraph}>
        Do you believe you can improve in running?
      </Text>
-       <RadioGroup radioButtons={this.state.data} onPress={this.onPress} />
+       <RadioGroup radioButtons={this.state.data} onPress={this.onPress1} />
        <Text style={styles.paragraph}>
        Do you feel motivated to train?
      </Text>
@@ -142,7 +160,7 @@ How confident are you on a scale of 1-10, 1 being not confident at all and 10 be
     onValueChange={(value) => this.setState({ value: value })}
   />
   <Text style={styles.paragraph}>Value: {this.state.value}</Text>
-       <Button titleStyle = {styles.butt} buttonStyle= {styles.butt} onPress={this.handleSubmit} title = "Ready for my recommendations!" />
+       <Button titleStyle = {styles.butt} buttonStyle= {styles.butt} onPress= {this.handleSubmit} title = "Ready for my recommendations!" />
       </View>
  );
  }
@@ -165,7 +183,8 @@ class TrainingOverview extends React.Component{
     const echecked= this.props.navigation.getParam('echecked', 'false')
     const q1= this.props.navigation.getParam('q1', '[]')
     const q2= this.props.navigation.getParam('q2', '[]')
-    console.log("vchecked: " + vchecked)
+    const name = this.props.navigation.getParam('name', ' ');
+    
   return (
     <View style={styles.container1}>
       <Button icon={
@@ -174,7 +193,7 @@ class TrainingOverview extends React.Component{
       size={15}
       color="white"
     />
-  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameThree'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2}}}  />
+  } buttonStyle={styles.back} onPress={() => {this.props.navigation.navigate('RouteNameThree'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2, name: name}}}  />
     <Text style={styles.header}>
         Training Overview
       </Text>
@@ -183,7 +202,7 @@ class TrainingOverview extends React.Component{
       </Text>
       <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Running" />
       <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Nutrition" />
-      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} onPress={() => {this.props.navigation.navigate('RouteNameFive'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2}}} title = "Mental Strength and Readiness" />
+      <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} onPress={() => {this.props.navigation.navigate('RouteNameFive'), {jchecked: jchecked, pchecked: pchecked, machecked: machecked, vchecked: vchecked, mchecked: mchecked, schecked:schecked, rchecked:rchecked, gchecked:gchecked, echecked: echecked, q1: q1, q2: q2, name: name}}} title = "Mental Strength and Readiness" />
       <Button titleStyle = {styles.butt} buttonStyle = {styles.butt} title = "Sleep" />
       </View>
        );

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Text, View, StyleSheet, TextInput, MultipleChoice, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import PropTypes from 'prop-types';
@@ -8,14 +8,30 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import Modal from 'react-native-modal';
 import { Button, CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {api} from './api';
 
-export default function MentalStrength(props) {
-  
-      const [isModalVisible, setModalVisible] = useState({rec1: false, rec2:false, rec3:false});
+export default function MentalStrength(props) {  
+    const [isModalVisible, setModalVisible] = useState({rec1: false, rec2:false, rec3:false});
     const [checked, setChecked] = useState({rec1: false, rec2:false, rec3:false});
+    const name = props.navigation.getParam('name', ' ');
+    console.log(name)
+
+    const [data, setData] = useState({ hits: [] });
+    const [query, setQuery] = useState('redux');
+
+useEffect(()=>{
+  const fetchData = async()=>{
+  const {dataa} = await api.get('/Feedback%20sessions?maxRecords=3&view=All%20sessions')
+  const filteredData = dataa.filter(name);
+  console.log(filteredData)
+  setData(filteredData.data);
+  };
+  fetchData();
+}, [query]);
+
 
       const toggleModal1 = () => {
-        console.log('togglemodal1')
+        
         setModalVisible({...isModalVisible, rec1: !isModalVisible.rec1});
        }
 
@@ -40,7 +56,7 @@ export default function MentalStrength(props) {
     const visualize = <ModalWrapper title = "Rec1" isModalVisible = {isModalVisible.rec1} toggleModal = {toggleModal1}/>
     const journal = <ModalWrapper2 title = "Rec2" isModalVisible = {isModalVisible.rec2} toggleModal = {toggleModal2}/>
     const vchecked= props.navigation.getParam('vchecked', 'false')
-    console.log("vchecked: " + vchecked)
+    
     return (
       <View style = {styles.container}>
         <Button icon={
@@ -96,6 +112,7 @@ function ModalWrapper2 (props) {
 </View>
   );
 }
+
 
 function ModalWrapper3 (props) {
 
