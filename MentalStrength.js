@@ -16,18 +16,17 @@ export default function MentalStrength(props) {
     const name = props.navigation.getParam('name', ' ');
     console.log(name)
 
-    const [data, setData] = useState({ hits: [] });
-    const [query, setQuery] = useState('redux');
+    const [data, setData] = useState( [] );
 
 useEffect(()=>{
   const fetchData = async()=>{
   const {dataa} = await api.get('/Feedback%20sessions?maxRecords=3&view=All%20sessions')
-  const filteredData = dataa.filter(name);
+  const filteredData = dataa.filter((row)=> row.name===name);
   console.log(filteredData)
   setData(filteredData.data);
   };
   fetchData();
-}, [query]);
+}, []);
 
 
       const toggleModal1 = () => {

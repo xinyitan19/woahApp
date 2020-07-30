@@ -51,7 +51,8 @@ class SurveyOne extends React.Component{
    name: '',
    email: '',
    phone: '',
-   value: '',
+   value: 0,
+   id: '',
    data: [
      {
        label: 'Always',
@@ -98,7 +99,7 @@ class SurveyOne extends React.Component{
   onPress1 = data => this.setState({ data });
   onPress2 = data2 => this.setState({ data2 });
 
- handleSubmit = () => {
+ handleSubmit = async () => {
    var datavalue1 = null
    this.state.data.forEach((item)=> {
      if(item.selected) 
@@ -110,16 +111,14 @@ class SurveyOne extends React.Component{
     {datavalue2=item.value}
   })
    const data = {fields: {name: this.state.name, email: this.state.email, phone: this.state.phone, value: this.state.value, data: datavalue1, data2: datavalue2}}
-   console.log(data)
-   api.post('/Feedback%20sessions', data)
-  .then(function (response) {
-    console.log(response); 
-  })
-  .catch(function (error) {
-    console.log(error);
-    console.log("console LOG")
-  });
-  this.props.navigation.navigate('RouteNameThree', {name: this.state.name, q1: this.state.data, q2: this.state.data2, value: this.state.value, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})
+   //console.log(data)
+   const response = await api.post('/Feedback%20sessions', data)
+    //console.log(response.data.id); 
+    const theid = response.data.id
+    this.setState({id: theid})
+    console.log(this.state.id)
+
+  this.props.navigation.navigate('RouteNameThree', {id: this.state.id, name: this.state.name, q1: this.state.data, q2: this.state.data2, value: this.state.value, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})
 }
 
 nameChange = name => { 

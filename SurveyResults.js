@@ -15,6 +15,7 @@ export default class SurveyResults extends React.Component{
     super(props);
     console.log(props)
     this.state = {
+      
       jchecked: this.props.navigation.getParam('jchecked', 'false'),
       pchecked: this.props.navigation.getParam('pchecked', 'false'),
       machecked: this.props.navigation.getParam('machecked', 'false'),
@@ -26,26 +27,65 @@ export default class SurveyResults extends React.Component{
        echecked: this.props.navigation.getParam('echecked', 'false'),
        q1: this.props.navigation.getParam('q1', '[]'),
        q2: this.props.navigation.getParam('q2', '[]'),
-       id: this.props.navigation.getParam('id', '')
-       
+       value: this.props.navigation.getParam('value', ' ')
     }
+    
   }
+
   async componentDidMount(){
-    console.log(this.state.id)
-  const mydata = {fields: {jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked}}
-      await api.patch('/Feedback%20sessions', mydata)
-      .then(function (response) {
-        console.log(response);
-      })  
-      .catch(function (error) {
-        console.log(error);
-      });
+    
+    const id= this.props.navigation.getParam('id', '')
+    console.log("hello")
+    console.log(id)
+  const mydata = {"records": [{
+    "id": id,
+"fields": {jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked}}]
+  }
+ // console.log(this.state, "state") 
+ // console.log(this.state.jchecked, "jchecked")     
+  const response = await api.patch('/Feedback%20sessions', mydata)
+    //  console.log(response)
     }
+
+    
+
+update = () => {
+  
+  if(this.state.q1[0].selected){
+      this.setState({vchecked: true})
+  }
+  if(this.state.q1[1].selected){
+    this.setState({mchecked: true})
+}
+  if(this.state.q1[2].selected){
+  this.setState({schecked: true})
+}
+console.log(this.state.vchecked, "VCHECKED")
+if(this.state.q2[0].selected){
+  this.setState({rchecked: true})
+}
+if(this.state.q2[1].selected){
+  this.setState({gchecked: true})
+}
+if(this.state.q2[2].selected){
+  this.setState({echecked: true})
+}
+if(this.state.value===1 || this.state.value ===2 || this.state.value===3){
+  this.setState({jchecked: true})
+}
+if(this.state.value===4 || this.state.value ===5 || this.state.value===6){
+  this.setState({jchecked: true})
+}
+if(this.state.value===7 || this.state.value ===8 || this.state.value===9){
+  this.setState({jchecked: true})
+}
+    }
+
     render(){
       
       const { navigation } = this.props;
       const name = this.props.navigation.getParam('name', ' ');
-      const value = this.props.navigation.getParam('value', ' ');
+      
       const journal = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.jchecked}
       onPress={() => this.setState({jchecked: !this.state.jchecked})} title = "Journal" />;
       const journalbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.jchecked}
@@ -101,11 +141,11 @@ export default class SurveyResults extends React.Component{
         {this.state.q2[0].selected ? rbold : reward}
         {this.state.q2[1].selected ? gbold : gratitude}
         {this.state.q2[2].selected ? ebold : expectations}
-        {value===1 || value ===2 || value===3 ? journalbold : journal}
-        {value===4 || value ===5 || value===6 ? prepbold : prepare}
-        {value===7 || value ===8 || value===9 ? mantrabold : mantra}
+        {this.state.value===1 || this.state.value ===2 || this.state.value===3 ? journalbold : journal}
+        {this.state.value===4 || this.state.value ===5 || this.state.value===6 ? prepbold : prepare}
+        {this.state.value===7 || this.state.value ===8 || this.state.value===9 ? mantrabold : mantra}
         
-        <Button buttonStyle={styles.check} onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name, q1: this.state.q1, q2: this.state.q2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "I'm all set!" />
+      <Button buttonStyle={styles.check} onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name, q1: this.state.q1, q2: this.state.q2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "I'm all set!" />
         </View>
          );
     }
