@@ -14,7 +14,7 @@ export default function MentalStrength(props) {
     const [isModalVisible, setModalVisible] = useState({rec1: false, rec2:false, rec3:false});
     const [checked, setChecked] = useState({rec1: false, rec2:false, rec3:false});
     const name = props.navigation.getParam('name', ' ');
-    console.log(name)
+    console.log(name, "NAME")
 
     const [data, setData] = useState( [] );
 

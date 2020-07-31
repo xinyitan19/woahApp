@@ -13,7 +13,6 @@ const MyContext = React.createContext();
 export default class SurveyResults extends React.Component{
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       
       jchecked: this.props.navigation.getParam('jchecked', 'false'),
@@ -28,31 +27,34 @@ export default class SurveyResults extends React.Component{
        q1: this.props.navigation.getParam('q1', '[]'),
        q2: this.props.navigation.getParam('q2', '[]'),
        value: this.props.navigation.getParam('value', ' ')
+       
     }
     
   }
 
   async componentDidMount(){
-    
+    this.update();
     const id= this.props.navigation.getParam('id', '')
-    console.log("hello")
-    console.log(id)
+    //console.log("hello")
+    console.log(id, "ID")
   const mydata = {"records": [{
     "id": id,
 "fields": {jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked}}]
   }
- // console.log(this.state, "state") 
- // console.log(this.state.jchecked, "jchecked")     
+ // console.log(this.state, "state")     
   const response = await api.patch('/Feedback%20sessions', mydata)
-    //  console.log(response)
+      console.log(response)
     }
 
     
 
 update = () => {
-  
+ //this.setState({vchecked: this.state.q1[0].selected, mchecked: this.state.q1[1].selected})
+  //console.log(this.state.vchecked, "VCHECKED")
+ // this.setState({vchecked: true, mchecked: this.state.q1[1].selected})
   if(this.state.q1[0].selected){
       this.setState({vchecked: true})
+      console.log(this.state.vchecked, "VCHECKED")
   }
   if(this.state.q1[1].selected){
     this.setState({mchecked: true})
@@ -60,7 +62,7 @@ update = () => {
   if(this.state.q1[2].selected){
   this.setState({schecked: true})
 }
-console.log(this.state.vchecked, "VCHECKED")
+
 if(this.state.q2[0].selected){
   this.setState({rchecked: true})
 }
@@ -74,12 +76,12 @@ if(this.state.value===1 || this.state.value ===2 || this.state.value===3){
   this.setState({jchecked: true})
 }
 if(this.state.value===4 || this.state.value ===5 || this.state.value===6){
-  this.setState({jchecked: true})
+  this.setState({pchecked: true})
 }
-if(this.state.value===7 || this.state.value ===8 || this.state.value===9){
-  this.setState({jchecked: true})
+if(this.state.value===7 || this.state.value ===8 || this.state.value===9 || this.state.value===10){
+  this.setState({machecked: true})
 }
-    }
+     }
 
     render(){
       
@@ -88,39 +90,39 @@ if(this.state.value===7 || this.state.value ===8 || this.state.value===9){
       
       const journal = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.jchecked}
       onPress={() => this.setState({jchecked: !this.state.jchecked})} title = "Journal" />;
-      const journalbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.jchecked}
+      const journalbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.jchecked}
       onPress={() => this.setState({jchecked: !this.state.jchecked})} title = "Journal" />;
       const prepare = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.pchecked}
       onPress={() => this.setState({pchecked: !this.state.pchecked})} title = "Prepare in your training well" />;
-      const prepbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.pchecked}
+      const prepbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.pchecked}
       onPress={() => this.setState({pchecked: !this.state.pchecked})} title = "Prepare in your training well" />;
       const mantra = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext}  checked={this.state.machecked}
       onPress={() => this.setState({machecked: !this.state.machecked})} title = "Create and practice a  mantra      " />;
-      const mantrabold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.machecked}
+      const mantrabold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.machecked}
       onPress={() => this.setState({machecked: !this.state.machecked})} title = "Create and practice a  mantra      " />;
       const visualize = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.vchecked}
       onPress={() => this.setState({vchecked: !this.state.vchecked})} title = "Visualize your success" />;
-      const visualizebold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.vchecked}
+      const visualizebold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.vchecked}
       onPress={() => this.setState({vchecked: !this.state.vchecked})} title = "Visualize your success" />;
       const mindfulness = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.mchecked}
       onPress={() => this.setState({mchecked: !this.state.mchecked})} title = "Practice mindfulness" />;
-      const mbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.mchecked}
+      const mbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.mchecked}
       onPress={() => this.setState({mchecked: !this.state.mchecked})} title = "Practice mindfulness" />;
       const selftalk = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.schecked}
       onPress={() => this.setState({schecked: !this.state.schecked})} title = "Improve your self talk" />;
-      const sbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.schecked}
+      const sbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.schecked}
       onPress={() => this.setState({schecked: !this.state.schecked})} title = "Improve your self talk" />;
       const reward = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.rchecked}
       onPress={() => this.setState({rchecked: !this.state.rchecked})} title = "Reward yourself when you achieve a goal" />;
-      const rbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.rchecked}
+      const rbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.rchecked}
       onPress={() => this.setState({rchecked: !this.state.rchecked})} title = "Reward yourself when you achieve a goal" />;
       const gratitude = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.gchecked}
       onPress={() => this.setState({gchecked: !this.state.gchecked})} title = "Practice gratitude" />;
-      const gbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.gchecked}
+      const gbold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.gchecked}
       onPress={() => this.setState({gchecked: !this.state.gchecked})} title = "Practice gratitude" />;
       const expectations = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.echecked}
       onPress={() => this.setState({echecked: !this.state.echecked})} title = "Adjust your expectations" />;
-      const ebold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={!this.state.echecked}
+      const ebold = <CheckBox size = {12} containerStyle = {styles.check} textStyle={styles.checktext} checked={this.state.echecked}
       onPress={() => this.setState({echecked: !this.state.echecked})} title = "Adjust your expectations" />;
       
       return (
@@ -143,7 +145,7 @@ if(this.state.value===7 || this.state.value ===8 || this.state.value===9){
         {this.state.q2[2].selected ? ebold : expectations}
         {this.state.value===1 || this.state.value ===2 || this.state.value===3 ? journalbold : journal}
         {this.state.value===4 || this.state.value ===5 || this.state.value===6 ? prepbold : prepare}
-        {this.state.value===7 || this.state.value ===8 || this.state.value===9 ? mantrabold : mantra}
+        {this.state.value===7 || this.state.value ===8 || this.state.value===9 || this.state.value=== 10 ? mantrabold : mantra}
         
       <Button buttonStyle={styles.check} onPress={() => {this.props.navigation.navigate('RouteNameFour', {name: name, q1: this.state.q1, q2: this.state.q2, jchecked: this.state.jchecked, pchecked: this.state.pchecked, machecked: this.state.machecked, vchecked: this.state.vchecked, mchecked: this.state.mchecked, schecked: this.state.schecked, rchecked: this.state.rchecked, gchecked: this.state.gchecked, echecked: this.state.echecked})}} title = "I'm all set!" />
         </View>
